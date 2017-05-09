@@ -1,0 +1,27 @@
+{
+  "name": "geiser",
+  "version": "1.0.0",
+  "description": "Prática de Web - Um visualizador de PCs fritando",
+  "main": "client/index.exemplo.html",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amandap11/cefet-web-geiser.git"
+  },
+  "author": "Amanda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amandap11/cefet-web-geiser/issues"
+  },
+  "homepage": "https://github.com/amandap11/cefet-web-geiser#readme",
+  "dependencies": {
+    "express": "latest",
+    "hbs": "^4.0.1",
+    "underscore": "^1.8.3"
+  }
+}

@@ -4,13 +4,12 @@ var express = require('express'),
 // carregar "banco de dados" (data/jogadores.json e data/jogosPorJogador.json)
 // você pode colocar o conteúdo dos arquivos json no objeto "db" logo abaixo
 // dica: 3-4 linhas de código (você deve usar o módulo de filesystem (fs))
-var db = {
-};
 
 var fs = require('fs');
-var jogadores = fs.readFileSync(__dirname + "/data/jogadores.json");
 
-db = JSON.parse(jogadores);
+var db = {
+	jogadores: JSON.parse(fs.readFileSync(__dirname + "/data/jogadores.json")),
+};
 
 // configurar qual templating engine usar. Sugestão: hbs (handlebars)
 //app.set('view engine', '???');
@@ -24,8 +23,8 @@ app.set('view engine', 'hbs');
 app.set('views', 'server/views');
 
 app.get('/', function (req, res) {
-  res.render('index');
-})
+  res.render('index', db.jogadores);
+});
 
 // EXERCÍCIO 3
 // definir rota para página de detalhes de um jogador --> renderizar a view

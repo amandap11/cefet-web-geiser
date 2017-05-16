@@ -6,9 +6,11 @@ var express = require('express'),
 // dica: 3-4 linhas de código (você deve usar o módulo de filesystem (fs))
 
 var fs = require('fs');
+var _ = require('underscore');
 
 var db = {
 	jogadores: JSON.parse(fs.readFileSync(__dirname + "/data/jogadores.json")),
+	jogosPorJogador: JSON.parse(fs.readFileSync(__dirname + "/data/jogosPorJogador.json"))
 };
 
 // configurar qual templating engine usar. Sugestão: hbs (handlebars)
@@ -31,6 +33,37 @@ app.get('/', function (req, res) {
 // jogador, usando os dados do banco de dados "data/jogadores.json" e
 // "data/jogosPorJogador.json", assim como alguns campos calculados
 // dica: o handler desta função pode chegar a ter umas 15 linhas de código
+app.get('/jogador/:id/', function (req, res) {
+
+	jogador = _.find(db.jogadores.players, function(el) {
+		return el.steamid === req.params.id;
+	});
+
+	var gamesPlayer = db.jogosPorJogador[req.params.id];
+
+	let gamesNotPlayed = _.where(gamesPlayer.games, { playtime_forever: 0 });
+  	gamesPlayer.jogosNaoJogados = gamesNotPlayed.length;
+
+	gamesPlayer.games = _.sortBy(gamesPlayer.games, function(data) {
+		return -data.playtime_forever;
+	});
+
+	gamesPlayer.games = _.first(gamesPlayer.games, 5);
+
+	gamesPlayer.games = _.map(gamesPlayer.games, function(data) {
+
+		var tempoHoras = Math.round(data.playtime_forever/60)
+		data.playtime_forever_horas = tempoHoras;
+
+		return data;
+	});
+  
+	res.render('jogador', {
+		profile: jogador,
+		gameInfo: gamesPlayer,
+		favorito: gamesPlayer[0]
+	});
+});
 
 
 // EXERCÍCIO 1
